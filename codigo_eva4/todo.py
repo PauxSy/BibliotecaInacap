@@ -1,5 +1,5 @@
-## import mysql.connector
-# from datetime import date, timedelta
+import mysql.connector
+from datetime import date, timedelta
 
 # class Libro:
 #     def __init__(self, ISBN_Libro: int, Genero: str, Titulo: str, Autor: str, Stock: int, Idioma: str):
@@ -301,15 +301,15 @@ class Biblioteca:
         self.cursor = self.conexion.cursor()
 
     #------------------------------------|LIBRO|----------------------------------------------
-    def agregar_libro(self, libro: Libro):
-        sql = "INSERT INTO Libros (ISBN_Libro, Genero, Titulo, Autor, Stock, Idioma) VALUES (%s, %s, %s, %s, %s, %s)"
+    def agregar_libro(self, libro: libro):
+        sql = "INSERT INTO Libros (isbn_libro, genero, titulo, autor, stock, idioma) VALUES (%s, %s, %s, %s, %s, %s)"
         valores = (libro.ISBN_Libro, libro.Genero, libro.Titulo, libro.Autor, libro.Stock, libro.Idioma)
         self.cursor.execute(sql, valores)
         self.conexion.commit()
 
-    def eliminar_libro(self, ISBN_Libro: int):
+    def eliminar_libro(self, isbn_libro: int):
         sql = "DELETE FROM Libros WHERE ISBN_Libro = %s"
-        self.cursor.execute(sql, (ISBN_Libro,))
+        self.cursor.execute(sql, (isbn_libro,))
         self.conexion.commit()
 
     def listar_libros_existentes(self):
@@ -318,8 +318,8 @@ class Biblioteca:
         libros = self.cursor.fetchall()
         print("------|Los libros existentes son|--------")
         for libro in libros:
-            ISBN_Libro, Genero, Titulo, Autor, Stock, Idioma = libro
-            print(f"ISBN_Libro: {ISBN_Libro}, Genero: {Genero}, Titulo: {Titulo}, Autor: {Autor}, Stock: {Stock}, Idioma: {Idioma}")
+           isbn_libro, genero, titulo, autor, stock, idioma = libro
+            print(f"ISBN_Libro: {isbn_libro}, Genero: {genero}, Titulo: {titulo}, Autor: {autor}, Stock: {stock}, Idioma: {idioma}")
 
     #----------------------------------|USUARIO|----------------------------------------------------
     def agregar_usuario(self, usuario: Usuario):
