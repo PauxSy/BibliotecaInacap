@@ -1,3 +1,5 @@
+import mysql.connector
+
 class Libros:
     def __init__(self, isbn_libro: int, genero: str, titulo: str, autor: str, stock: int, idioma: str):
         self.isbn_libro = isbn_libro
@@ -7,11 +9,13 @@ class Libros:
         self.stock = stock
         self.idioma = idioma
 
+
     def agregar_libro(self, libro):
-        sql = "INSERT INTO Libros (isbn_libro, genero, titulo, autor, stock, idioma) VALUES (%s, %s, %s, %s, %s, %s)"
+        sql = "INSERT INTO libros (isbn_libro, genero, titulo, autor, stock, idioma) VALUES (%s, %s, %s, %s, %s, %s)"
         valores = (libro.isbn_libro, libro.genero, libro.titulo, libro.autor, libro.stock, libro.idioma)
         self.cursor.execute(sql, valores)
         self.conexion.commit()
+        
 
     def eliminar_libro(self, isbn_libro: int):
         sql = "DELETE FROM Libros WHERE ISBN_Libro = %s"

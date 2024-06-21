@@ -1,5 +1,7 @@
-import biblioteca, libros, usuarios, prestamos, devoluciones
+import biblioteca, usuarios, prestamos, devoluciones, multas
+from libros import Libros
 from datetime import datetime, date
+import mysql.connector
 
 print("Bienvenido al sistema\n")
 print("Ingrese los datos de su base de datos\n")
@@ -9,7 +11,18 @@ user = input("Ingrese el usuario: ")
 password = input("Ingrese la contraseña: ")
 port = input("Ingrese el puerto: ")
 database = input("Ingrese el nombre de la base de datos: ")
-mi_biblioteca = biblioteca.Biblioteca(host, user, password, port, database)
+
+# Conectar a la base de datos
+conexion = mysql.connector.connect(
+    host=host,
+    user=user,
+    password=password,
+    port=port,
+    database=database
+)
+mi_biblioteca = biblioteca.Biblioteca(host, user, password,port,database)
+
+#multas.multar_devolucion_fuera_de_plazo(host,user,password,port,database)
 
 menu = int(input("""
 1. Gestionar Libros
@@ -28,19 +41,17 @@ if menu == 1 or menu == 2 or menu == 3 or menu == 4:
 
         if menu_1 == 1:
             print("Ingrese los datos del libro a guardar:\n")
-            ISBN_Libro = int(input("Ingrese el ISBN del libro: "))
-            Genero = input("Ingrese el género: ")
-            Titulo = input("Ingrese el título: ")
-            Autor = input("Ingrese el autor: ")
-            Stock = int(input("Ingrese el stock: "))
-            Idioma = input("Ingrese el idioma: ")
+            isbn_libro = int(input("Ingrese el ISBN del libro: "))
+            genero = input("Ingrese el género: ")
+            titulo = input("Ingrese el título: ")
+            autor = input("Ingrese el autor: ")
+            stock = int(input("Ingrese el stock: "))
+            idioma = input("Ingrese el idioma: ")
 
-            nuevo_libro = libros(ISBN_Libro, Genero, Titulo, Autor, Stock, Idioma)
-            mi_biblioteca.agregar_libro(nuevo_libro)
-
+            
         if menu_1 == 2:
-            ISBN_Libro = int(input("Ingrese el ISBN del libro a eliminar: "))
-            mi_biblioteca.eliminar_libro(ISBN_Libro)
+            isbn_libro = int(input("Ingrese el ISBN del libro a eliminar: "))
+            libros.eliminar_libro(isbn_libro)
 
         if menu_1 == 3:
             mi_biblioteca.listar_libros_existentes()
