@@ -1,4 +1,4 @@
-class Devolucion:
+class Devoluciones:
     def __init__(self, ID_Devolucion: int, ID_Prestamo: int, Fecha_Devolucion: date, Estado_Devolucion: str):
         self.ID_Devolucion = ID_Devolucion
         self.ID_Prestamo = ID_Prestamo
