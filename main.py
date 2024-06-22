@@ -187,7 +187,7 @@ def MenuBiblioteca():
             print("Opción no válida")
 
     conexion.close()
-    print("¡Hasta luego!")
+    print("¡Hasta luego hollaaa!")
 
 
 MenuBiblioteca()
