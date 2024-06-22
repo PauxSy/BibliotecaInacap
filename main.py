@@ -34,7 +34,9 @@ def MenuBiblioteca():
         2. Gestionar Usuarios
         3. Gestionar Prestamos
         4. Gestionar Devoluciones
-        5. Salir
+        5. Gestionar Renovaciones
+        6. Generar  Reporte
+        7. Salir del Sistema
         Ingrese su opción: """))
 
         if menu == 1:
@@ -178,8 +180,13 @@ def MenuBiblioteca():
 
                 else:
                     print("Opción no válida")
-
         elif menu == 5:
+            pass
+
+        elif menu == 6:
+            pass
+
+        elif menu == 7:
             print("Saliendo del sistema...")
             break
 
@@ -187,7 +194,7 @@ def MenuBiblioteca():
             print("Opción no válida")
 
     conexion.close()
-    print("¡Hasta luego hollaaa!")
+    print("¡Hasta luego!")
 
 
 MenuBiblioteca()
