@@ -28,3 +28,5 @@ class Libros:
         for libro in libros:
             isbn_libro, genero, titulo, autor, stock, idioma = libro
             print(f"ISBN_Libro: {isbn_libro}, Genero: {genero}, Titulo: {titulo}, Autor: {autor}, Stock: {stock}, Idioma: {idioma}")
+
+            
