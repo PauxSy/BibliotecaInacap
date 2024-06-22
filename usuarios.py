@@ -1,16 +1,18 @@
 class Usuarios:
-    def __init__(self, rut_usuario: str, tipo_usuario: str, nombre: str, apellido: str, email: str, celular: int):
+    def __init__(self, rut_usuario: str, tipo_usuario: str, nombre: str, apellido: str, email: str, celular: int,conexion, cursor):
         self.rut_usuario = rut_usuario
         self.tipo_usuario = tipo_usuario
         self.nombre = nombre
         self.apellido = apellido
         self.email = email
         self.celular = celular
+        self.conexion = conexion
+        self.cursor = cursor
         
         
-    def agregar_usuario(self, usuario):
+    def agregar_usuario(self):
         sql = "INSERT INTO Usuarios (rut_usuario, tipo_usuario, nombre, apellido, email, celular) VALUES (%s, %s, %s, %s, %s, %s)"
-        valores = (usuario.rut_usuario, usuario.tipo_usuario, usuario.nombre, usuario.apellido, usuario.email, usuario.celular)
+        valores = (self.rut_usuario, self.tipo_usuario, self.nombre, self.apellido, self.email, self.celular)
         self.cursor.execute(sql, valores)
         self.conexion.commit()
 
