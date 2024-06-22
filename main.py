@@ -62,6 +62,7 @@ if menu == 1 or menu == 2 or menu == 3 or menu == 4:
             print("Libro eliminado exitosamente.")
 
         if menu_1 == 3:
+
             libros = Libros(None, None, None, None, None, None,mi_biblioteca.conexion, mi_biblioteca.cursor)
             libros.listar_libros_existentes()
 
