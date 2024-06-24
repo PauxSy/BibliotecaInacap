@@ -33,3 +33,9 @@ y no hacer un nuevo registro de devolucion, exactamente debe de cambiar el estad
 y el estado_prestamo ,debe de cambiar a estado_prestamo: Inactivo 
 
 
+necesito limitar la cantidad de prestamos posibles que puede hacer un usuario de tipo 
+Estudiantes el cual puede solicitar máximo 4 prestamos de libros a la vez
+
+cuando se hace un prestamo de un libro el stock del libro debe de bajar
+y cuando el estado_prestamo vuelva a tener el valor Inactivo debe de volver el stock 
+al valor anterior y si el stock esta en 0 no se debe de permitir hacer un prestamo

@@ -14,13 +14,23 @@ class Prestamos:
         self.cursor.execute("SELECT IFNULL(MAX(id_prestamo), 0) + 1 FROM Prestamos")
         return self.cursor.fetchone()[0]
 
-    #fran
     def agregar_prestamo(self):
+        if not self.verificar_limite_prestamos():
+            print("El usuario ya tiene el máximo permitido de préstamos activos.")
+            return
+
+        # Verificar stock del libro
+        if not self.verificar_stock():
+            print("No hay suficiente stock para el libro solicitado.")
+            return
+
+        # Actualizar stock del libro
+        self.actualizar_stock(-1)
+
         sql = "INSERT INTO Prestamos (id_prestamo, rut_usuario, isbn_libro, tipo_de_prestamo, estado_prestamo, fecha_prestamo) VALUES (%s, %s, %s, %s, %s, %s)"
         valores = (self.id_prestamo, self.rut_usuario, self.isbn_libro, self.tipo_de_prestamo, self.estado_prestamo, self.fecha_prestamo)
         self.cursor.execute(sql, valores)
         self.conexion.commit()
-    
     
     # ---------<< FUNCIONES DE RENOVACION ARIEEEL >>>----falta entenderlo y implementarlo con el menubiblioteca--
     # def agregar_prestamo(self, rut_usuario: str, isbn_libro: int, tipo_de_prestamo: str):
@@ -92,5 +102,27 @@ class Prestamos:
             id_prestamo, rut_usuario, isbn_libro, tipo_de_prestamo, estado_prestamo, fecha_Prestamo = prestamo
             print(f"id_prestamo: {id_prestamo}, rut_usuario: {rut_usuario}, isbn_libro: {isbn_libro}, Tipo_De_Prestamo: {tipo_de_prestamo}, estado_prestamo: {estado_prestamo}, Fecha_Prestamo: {fecha_Prestamo}")
 
-    def max_libros(self):
-        None
+    def verificar_limite_prestamos(self):
+        sql = "SELECT COUNT(*) FROM Prestamos WHERE rut_usuario = %s AND estado_prestamo = 'Activo'"
+        self.cursor.execute(sql, (self.rut_usuario,))
+        prestamos_activos = self.cursor.fetchone()[0]
+
+        sql = "SELECT tipo_usuario FROM Usuarios WHERE rut_usuario = %s"
+        self.cursor.execute(sql, (self.rut_usuario,))
+        tipo_usuario = self.cursor.fetchone()[0]
+
+        if tipo_usuario.lower() == "alumno" and prestamos_activos >= 4:
+            return False
+        return True
+
+    def verificar_stock(self):
+        sql = "SELECT stock FROM Libros WHERE isbn_libro = %s"
+        self.cursor.execute(sql, (self.isbn_libro,))
+        stock = self.cursor.fetchone()[0]
+        return stock > 0
+
+    def actualizar_stock(self, cantidad):
+        sql = "UPDATE Libros SET stock = stock + %s WHERE isbn_libro = %s"
+        self.cursor.execute(sql, (cantidad, self.isbn_libro))
+        self.conexion.commit()
+    

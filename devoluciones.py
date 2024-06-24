@@ -1,5 +1,4 @@
 from datetime import date, timedelta
-
 class Devoluciones:
     def __init__(self, id_prestamo: int, fecha_devolucion: date, estado_devolucion: str, conexion, cursor):
         self.id_prestamo = id_prestamo
@@ -40,16 +39,29 @@ class Devoluciones:
             self.conexion.commit()
             print("Devolución actualizada exitosamente a 'Devuelto'.")
 
+            # Actualizar el estado del préstamo y el stock del libro
             sql_prestamo = "UPDATE Prestamos SET estado_prestamo = %s WHERE id_prestamo = %s"
             valores_prestamo = ('Inactivo', self.id_prestamo)
             self.cursor.execute(sql_prestamo, valores_prestamo)
             self.conexion.commit()
+
+            # Actualizar el stock del libro
+            self.actualizar_stock_libro(1)
         else:
             # Si no existe, insertar una nueva devolución
             sql_insert = "INSERT INTO devoluciones (id_devolucion, id_prestamo, fecha_devolucion, estado_devolucion) VALUES (%s, %s, %s, %s)"
             valores_insert = (self.id_devolucion, self.id_prestamo, self.fecha_devolucion, self.estado_devolucion)
             self.cursor.execute(sql_insert, valores_insert)
             self.conexion.commit()
+
+    def actualizar_stock_libro(self, cantidad):
+        sql_libro = "SELECT isbn_libro FROM Prestamos WHERE id_prestamo = %s"
+        self.cursor.execute(sql_libro, (self.id_prestamo,))
+        isbn_libro = self.cursor.fetchone()[0]
+
+        sql_update_stock = "UPDATE Libros SET stock = stock + %s WHERE isbn_libro = %s"
+        self.cursor.execute(sql_update_stock, (cantidad, isbn_libro))
+        self.conexion.commit()
 
     def listar_devoluciones(self):
         sql = "SELECT * FROM devoluciones"

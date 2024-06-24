@@ -148,20 +148,37 @@ class Biblioteca:
                         if multa.comprobar_multas(rut_usuario):
                             continue
                         isbn_libro = int(input("Ingrese el ISBN del libro: "))
+                        nuevo_prestamo = Prestamos(rut_usuario, isbn_libro, None, None, None, mi_biblioteca.conexion, mi_biblioteca.cursor)
+
                         tipo_de_prestamo = input("Ingrese el tipo de préstamo (Renovación / Préstamo nuevo): ")
                         estado_prestamo = 'Activo'
                         fecha_prestamo = input("Ingrese la fecha del préstamo (YYYY-MM-DD): ")
                         fecha_prestamo = date.fromisoformat(fecha_prestamo)
+
+                        # Verificar si hay stock suficiente para el libro
+                        if not nuevo_prestamo.verificar_stock():
+                            print("No hay suficiente stock para el libro solicitado.")
+                            continue
+                        
                         nuevo_prestamo = Prestamos(rut_usuario, isbn_libro, tipo_de_prestamo, estado_prestamo, fecha_prestamo, mi_biblioteca.conexion, mi_biblioteca.cursor)
+
+                        if not nuevo_prestamo.verificar_limite_prestamos():
+                            print("Ingreso de Prestamo denegado")
+                            print("El usuario ya tiene el máximo permitido de préstamos activos.")
+                            continue
+                        
                         nuevo_prestamo.agregar_prestamo()
+
                         fecha_devolucion = Devoluciones.calcular_fecha_devolucion(nuevo_prestamo.rut_usuario, nuevo_prestamo.fecha_prestamo, mi_biblioteca.cursor)
-                        # Registrar devolución automáticamente
+
                         estado_devolucion = 'Pendiente'
                         nueva_devolucion = Devoluciones(nuevo_prestamo.id_prestamo, fecha_devolucion, estado_devolucion, mi_biblioteca.conexion, mi_biblioteca.cursor)
+
                         nueva_devolucion.registrar_devoluciones()
-                        # Mostrar la fecha de devolución al usuario
+
                         print(f"Fecha de devolución estimada: {fecha_devolucion}")
                         print("Préstamo y devolución registrados exitosamente.")
+
                     elif menu_3 == 2:
                         prestamo = Prestamos(None, None, None, None, None, mi_biblioteca.conexion, mi_biblioteca.cursor)
                         prestamo.listar_prestamos()
@@ -227,3 +244,4 @@ class Biblioteca:
 
 # Ejecutar el menú de la biblioteca
 Biblioteca.MenuBiblioteca()
+
