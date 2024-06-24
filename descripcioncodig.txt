@@ -1,0 +1,35 @@
+
+tipo_usuario:alumno -docente
+-- estado_prestamo: Activo - Inactivo 
+-- estado_devolucion :Pendiente - Devuelto
+
+-- estado_multa:Pagado -Por Pagar
+
+--fecha_devolucion:es la fecha plazo original pero ademas es por donde se ingresa la fecha real de devolucion del libro
+
+--fecha_prestamo:fecha donde se hace el prestamo
+
+CREATE TABLE DEVOLUCIONES(
+ID_DEVOLUCION INT,
+ID_PRESTAMO INT,
+FECHA_DEVOLUCION DATE,
+ESTADO_DEVOLUCION VARCHAR(10)
+);
+
+al hacer un prestamo automaticamente se hara un registro de devolucion 
+se auto rellenara el id_devolucion con un auto incremento automatico y unico para cada devolucion
+y el id_prestamo se autorellenaran con el id respectivo del prestamo creado , la fecha de devolucion 
+se auto rellenara con la asignacion de una fecha estimada de devolucion que corresponderia a la fecha_prestamo +
+la cantidad de dias maximos segun el tipo de usuario que esta haciendo el prestamo , para lograr lo de la fecha_devolucion antes 
+necesito que a través del rut del usuario que esta solicitando el prestamo se busque el tipo_usuario 
+
+
+Para estudiantes: máximo 7 días.
+Para docentes: máximo 20 días.
+
+
+para el ingreso manual de la devolucion ,debe de cambiar el registro de devolucion con el id_prestamo ingresado manualmente
+y no hacer un nuevo registro de devolucion, exactamente debe de cambiar el estado_devolucion a "Devuelto" 
+y el estado_prestamo ,debe de cambiar a estado_prestamo: Inactivo 
+
+

@@ -50,7 +50,6 @@ class Devoluciones:
             valores_insert = (self.id_devolucion, self.id_prestamo, self.fecha_devolucion, self.estado_devolucion)
             self.cursor.execute(sql_insert, valores_insert)
             self.conexion.commit()
-            print("Devolución agregada exitosamente.")
 
     def listar_devoluciones(self):
         sql = "SELECT * FROM devoluciones"
@@ -60,49 +59,4 @@ class Devoluciones:
         for devolucion in devoluciones:
             id_devolucion, id_prestamo, fecha_devolucion, estado_devolucion = devolucion
             print(f"ID_Devolucion: {id_devolucion}, id_prestamo: {id_prestamo}, Fecha_Devolucion: {fecha_devolucion}, Estado_Devolucion: {estado_devolucion}")
-
-
-# from datetime import date, timedelta
-
-# class Devoluciones:
-#     def __init__(self, id_prestamo: int, fecha_devolucion: date, estado_devolucion: str, conexion, cursor):
-#         self.id_prestamo = id_prestamo
-#         self.fecha_devolucion = fecha_devolucion
-#         self.estado_devolucion = estado_devolucion
-#         self.conexion = conexion
-#         self.cursor = cursor
-#         self.id_devolucion = self.generar_id_devolucion()
-
-#     def generar_id_devolucion(self):
-#         self.cursor.execute("SELECT IFNULL(MAX(id_devolucion), 0) + 1 FROM devoluciones")
-#         return self.cursor.fetchone()[0]
-    
-#     @staticmethod
-#     def calcular_fecha_devolucion(rut_usuario, fecha_prestamo, cursor):
-#         sql = "SELECT tipo_usuario FROM Usuarios WHERE rut_usuario = %s"
-#         cursor.execute(sql, (rut_usuario,))
-#         tipo_usuario = cursor.fetchone()[0]
-        
-#         if tipo_usuario.lower() == "alumno":
-#             return fecha_prestamo + timedelta(days=7)
-#         elif tipo_usuario.lower() == "docente":
-#             return fecha_prestamo + timedelta(days=20)
-#         else:
-#             raise ValueError("Tipo de usuario no válido")
-#     def registrar_devoluciones(self):
-#         sql = "INSERT INTO devoluciones (id_devolucion, id_prestamo, fecha_devolucion, estado_devolucion) VALUES (%s, %s, %s, %s)"
-#         valores = (self.id_devolucion, self.id_prestamo, self.fecha_devolucion, self.estado_devolucion)
-#         self.cursor.execute(sql, valores)
-#         self.conexion.commit()
-
-
-
-#     def listar_devoluciones(self):
-#         sql = "SELECT * FROM devoluciones"
-#         self.cursor.execute(sql)
-#         devoluciones = self.cursor.fetchall()
-#         print("------|Los registros de devoluciones existentes son|--------")
-#         for devolucion in devoluciones:
-#             id_devolucion, id_prestamo, fecha_devolucion, estado_devolucion = devolucion
-#             print(f"ID_Devolucion: {id_devolucion}, id_prestamo: {id_prestamo}, Fecha_Devolucion: {fecha_devolucion}, Estado_Devolucion: {estado_devolucion}")
 
