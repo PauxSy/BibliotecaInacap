@@ -1,5 +1,6 @@
 from datetime import date, timedelta
 import mysql.connector
+import time
 
 # Importación de clases
 from devoluciones import Devoluciones
@@ -26,6 +27,8 @@ class Biblioteca:
                 print("¡Conexión exitosa!")
         except mysql.connector.Error as e:
             print(f'Error al conectar a la base de datos: {e}')
+    
+
 
     def ejecutar_consulta(self, query, params=None):
         if params:
@@ -51,9 +54,10 @@ class Biblioteca:
 
         # Conectar a la base de datos
         mi_biblioteca = Biblioteca(host, user, password, port, database)
+        multa = Multas(None,None,None,None,mi_biblioteca,valor_diario_multa=1000)
 
         while True:
-            # Mostrar el menú principal
+            # Mostrar el menú principal 
             menu = int(input("""
             1. Gestionar Libros
             2. Gestionar Usuarios
@@ -141,6 +145,8 @@ class Biblioteca:
                     if menu_3 == 1:
                         print("Ingrese los datos del préstamo a guardar:\n")
                         rut_usuario = input("Ingrese el RUT del usuario: ")
+                        if multa.comprobar_multas(rut_usuario):
+                            continue
                         isbn_libro = int(input("Ingrese el ISBN del libro: "))
                         tipo_de_prestamo = input("Ingrese el tipo de préstamo (Renovación / Préstamo nuevo): ")
                         estado_prestamo = 'Activo'

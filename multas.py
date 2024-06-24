@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, time
 #from biblioteca import Biblioteca  # Asegúrate de importar la clase Biblioteca si no está en este archivo
 
 class Multas:
@@ -55,7 +55,7 @@ class Multas:
 
 
         else:
-            print("Usuario Sr.(a) ",nombre_usuario,": No tiene multas pendientes de pago.")
+            print("Usuario Sr.(a) ",nombre_usuario[0],"",nombre_usuario[1],": No tiene multas pendientes de pago.")
             
         cursor.close()
 
@@ -81,6 +81,8 @@ class Multas:
 
         if existe_multa_:
             print("[Sistema de Prestamos]: El usuario tiene una o más multas pendiente de pago. No es posible efectuar el préstamo.")
+            print("Te devolveré al menu principal.")
+
             return True
             
         else:
