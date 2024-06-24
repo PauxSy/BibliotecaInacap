@@ -109,7 +109,7 @@ def MenuBiblioteca():
                 if menu_2 == 1:
                     print("Ingrese los datos del usuario a guardar:\n")
                     rut_usuario = input("Ingrese el RUT del usuario: ")
-                    tipo_usuario = input("Ingrese el tipo de usuario: ")
+                    tipo_usuario = input("Ingrese el tipo de usuario (alumno - docente): ")
                     nombre = input("Ingrese el nombre del usuario: ")
                     apellido = input("Ingrese el apellido del usuario: ")
                     email = input("Ingrese el correo del usuario: ")
