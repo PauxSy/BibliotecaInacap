@@ -8,7 +8,7 @@ class Multas:
         self.monto_deuda = monto_deuda
         self.dias_retraso = dias_retraso
         self.biblioteca = biblioteca
-        self.valor_diario_multa = valor_diario_multa
+        self.valor_diario_multa = 1000
 
     def generar_multa(self):
         fecha_actual = datetime.now().date()
@@ -42,28 +42,35 @@ class Multas:
                 id_dev_atrasadas.append(id_devolucion)
                 fecha_dev_atrasadas.append(fecha_devolucion)
                 dias_a.append(dias_atraso)
+            
                 
                 print("IDs de devolución atrasadas:", id_dev_atrasadas)
                 print("Fechas de devolución atrasadas:", fecha_dev_atrasadas)
                 print("Días de retraso:", dias_a)
-
+                
+                                 
+                
             for i in range(len(id_dev_atrasadas)):
-
-                registrar_multa = """INSERT INTO MULTAS (ID_MULTA, ID_DEVOLUCION, ESTADO_MULTA, MONTO_DEUDA, DIAS_RETRASO)
-                            VALUES (%s, 'Pendiente', %s, %s)"""
-
-                cursor.execute(registrar_multa, (id_dev_atrasadas[i], dias_a[i]*self.valor_diario_multa, dias_a[i]))
-
-         # if resultados:
-            # Generar multas para los resultados encontrados
-        #    for row in resultados:
-         #       id_devolucion = row[0]
-          #      sql_update = """
-           ##    SET multa_generada = TRUE
-             #   WHERE id = %s
-              #  """
-               # cursor.execute(sql_update, (id_devolucion,))
+                valor_multa = dias_a[i] * self.valor_diario_multa
+                cursor.execute("SELECT COUNT(*) FROM MULTAS WHERE ID_DEVOLUCION = %s", (id_dev_atrasadas[i],))
+                existe_multa = cursor.fetchone()[0]  
+                if existe_multa:
+                    actualizar_multa = """UPDATE MULTAS 
+                                          SET ESTADO_MULTA = 'Pendiente', 
+                                              MONTO_DEUDA = %s, 
+                                              DIAS_RETRASO = %s 
+                                          WHERE ID_DEVOLUCION = %s"""
+                                          
+                    cursor.execute(actualizar_multa, (valor_multa, dias_a[i],id_dev_atrasadas[i]))
+                    print("ID_devolucion_atrasada",id_dev_atrasadas[i])
         
+                else:
+                    registrar_multa = """INSERT INTO MULTAS (ID_DEVOLUCION, ESTADO_MULTA, MONTO_DEUDA, DIAS_RETRASO)
+                                     VALUES (%s, %s, %s, %s)"""
+
+                    cursor.execute(registrar_multa, (id_dev_atrasadas[i],'Pendiente', valor_multa, dias_a[i]))
+                    
+       
         # Confirmar los cambios
 
             # Confirmar los cambios en la base de datos
