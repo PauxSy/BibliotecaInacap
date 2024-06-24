@@ -9,6 +9,85 @@ class Multas:
         self.dias_retraso = dias_retraso
         self.biblioteca = biblioteca
         self.valor_diario_multa = 1000
+        
+    
+    def pago_multa(self, rut_usuario):
+        # Obtener el cursor de la biblioteca
+        cursor = self.biblioteca.conexion.cursor()
+        cursor.execute("""
+            SELECT SUM(M.MONTO_DEUDA) AS TOTAL_MULTAS
+            FROM USUARIOS U 
+            JOIN PRESTAMOS P ON U.RUT_USUARIO = P.RUT_USUARIO 
+            JOIN DEVOLUCIONES D ON P.ID_PRESTAMO = D.ID_PRESTAMO 
+            JOIN MULTAS M ON D.ID_DEVOLUCION = M.ID_DEVOLUCION 
+            WHERE U.RUT_USUARIO = %s AND M.ESTADO_MULTA = 'Pendiente'
+                """,(rut_usuario,))
+        
+        total_multas = cursor.fetchone()[0]
+        
+        cursor.execute("""
+            SELECT NOMBRE, APELLIDO
+            FROM USUARIOS WHERE RUT_USUARIO = %s;
+                """,(rut_usuario,))
+        
+        nombre_usuario = cursor.fetchone()
+
+        if total_multas:
+            print("Usuario Sr.(a) ",nombre_usuario[0],"",nombre_usuario[1],": El monto total de la deuda es de",f"${total_multas:,.0f}".replace(",", "."))
+            pago = input("¿Desea proceder a registrar el pago de la multa? [1. Si / 2. No]\n")
+            if pago == "1":
+                cursor.execute("""
+                    UPDATE MULTAS M
+                    JOIN DEVOLUCIONES D ON P.ID_PRESTAMO = D.ID_PRESTAMO 
+                    JOIN PRESTAMOS P ON D.ID_PRESTAMO = P.ID_PRESTAMO 
+                    JOIN USUARIOS U ON P.RUT_USUARIO = U.RUT_USUARIO
+                    SET M.ESTADO_MULTA = 'Pagada'
+                    WHERE U.RUT_USUARIO = %s
+                               """)
+                # Confirmar los cambios en la base de datos
+                self.biblioteca.conexion.commit()
+            
+                print("[Sistema de Préstamos]: El pago de la/s multa/s pendientes ha sido registrado exitosamente.")
+
+            else:
+                print("[Sistema de Préstamos]: Se ha cancelado el proceso de pago.")                
+        
+
+
+        else:
+            print("Usuario Sr.(a) ",nombre_usuario,": No tiene multas pendientes de pago.")
+            
+        cursor.close()
+
+
+            
+    def comprobar_multas(self, rut_usuario):
+        # Obtener el cursor de la biblioteca
+        cursor = self.biblioteca.conexion.cursor()
+               
+        existe_multa = """
+                SELECT U.RUT_USUARIO 
+                FROM USUARIOS U 
+                JOIN PRESTAMOS P ON U.RUT_USUARIO = P.RUT_USUARIO 
+                JOIN DEVOLUCIONES D ON P.ID_PRESTAMO = D.ID_PRESTAMO 
+                JOIN MULTAS M ON D.ID_DEVOLUCION = M.ID_DEVOLUCION 
+                WHERE U.RUT_USUARIO = %s AND M.ESTADO_MULTA = 'pendiente'
+                """
+        cursor.execute(existe_multa, (rut_usuario,))
+
+        existe_multa_ = cursor.fetchall()  # Usar cursor directamente
+        
+        cursor.close()
+
+        if existe_multa_:
+            print("[Sistema de Prestamos]: El usuario tiene una o más multas pendiente de pago. No es posible efectuar el préstamo.")
+            return True
+            
+        else:
+            print("[Sistema de Prestamos]: El usuario no tiene multas pendientes de pago. Puede proceder con el préstamo.")
+            return False
+        
+
 
     def generar_multa(self):
         fecha_actual = datetime.now().date()
