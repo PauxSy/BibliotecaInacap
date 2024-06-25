@@ -56,7 +56,8 @@ class Biblioteca:
         mi_biblioteca = Biblioteca(host, user, password, port, database)
         multa = Multas(None,None,None,None,mi_biblioteca,valor_diario_multa=1000)
         usuario = Usuarios(None,None,None,None,None,None,mi_biblioteca,mi_biblioteca.cursor)
-        
+
+
         while True:
             # Mostrar el menú principal 
             menu = int(input("""
