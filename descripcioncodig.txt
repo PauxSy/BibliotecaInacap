@@ -3,6 +3,8 @@ tipo_usuario:alumno -docente
 -- estado_prestamo: Activo - Inactivo 
 -- estado_devolucion :Pendiente - Devuelto
 
+tipo_de_prestamo : Renovacion - Prestamo nuevo
+
 -- estado_multa:Pagado -Por Pagar
 
 --fecha_devolucion:es la fecha plazo original pero ademas es por donde se ingresa la fecha real de devolucion del libro
@@ -39,3 +41,20 @@ Estudiantes el cual puede solicitar máximo 4 prestamos de libros a la vez
 cuando se hace un prestamo de un libro el stock del libro debe de bajar
 y cuando el estado_prestamo vuelva a tener el valor Inactivo debe de volver el stock 
 al valor anterior y si el stock esta en 0 no se debe de permitir hacer un prestamo
+
+
+
+necesito que al querer hacer una renovacion de un prestamo primero debería de ingresar el id_prestamo 
+y buscar el id_prestamo a traves de mi base de datos msql 
+y posterior se debe cambiar el estado_prestamo a inactivo posterior cambiar el estado_devolucion a devuelto del respectivo prestamo ,
+y luego se hace un nuevo de registro de prestamo el cual contendra el mismo rut_usuario el mismo isbn_libro y 
+el tipo_de_prestamo debe de ser Renovacion el estado_prestamo debe de ser Activo y la fecha_prestamo debe ser 
+ingresada manualmente y se debe hacer nuevamente automaticamente una devolucion pero con la diferencia de que la 
+fecha_devolucion se le asignaran 3 dias como maximo 
+
+Estudiantes: hasta 1 renovación  y solo para un libro.
+Docentes: hasta 3 renovaciones consecutivas para el mismo libro y pueden renovar todos sus libros.
+
+
+
+

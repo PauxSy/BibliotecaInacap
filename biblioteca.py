@@ -150,7 +150,7 @@ class Biblioteca:
                         isbn_libro = int(input("Ingrese el ISBN del libro: "))
                         nuevo_prestamo = Prestamos(rut_usuario, isbn_libro, None, None, None, mi_biblioteca.conexion, mi_biblioteca.cursor)
 
-                        tipo_de_prestamo = input("Ingrese el tipo de préstamo (Renovación / Préstamo nuevo): ")
+                        tipo_de_prestamo = input("Ingrese el tipo de préstamo (Renovacion / Prestamo nuevo): ")
                         estado_prestamo = 'Activo'
                         fecha_prestamo = input("Ingrese la fecha del préstamo (YYYY-MM-DD): ")
                         fecha_prestamo = date.fromisoformat(fecha_prestamo)
@@ -214,16 +214,20 @@ class Biblioteca:
 
             elif menu == 5:
                 while True:
-                    # Menú de gestión de renovaciones
                     menu_5 = int(input("""
-                    1. Ingresar una renovación
+                    1. Renovar un préstamo
                     2. Listar renovaciones existentes
                     3. Volver al menú principal
                     Ingrese su opción: """))
                     if menu_5 == 1:
-                        pass  # Lógica para ingresar una renovación
+                        id_prestamo_original = int(input("Ingrese el ID del préstamo original: "))
+                        nueva_fecha_prestamo = date.today()
+                        prestamos = Prestamos(None, None, None, None, None, mi_biblioteca.conexion, mi_biblioteca.cursor)
+                        prestamos.renovar_prestamo(id_prestamo_original, nueva_fecha_prestamo)
+                        print("Préstamo renovado exitosamente.")
                     elif menu_5 == 2:
-                        pass  # Lógica para listar renovaciones existentes
+                        prestamos = Prestamos(None, None, None, None, None, mi_biblioteca.conexion, mi_biblioteca.cursor)
+                        prestamos.listar_renovaciones()
                     elif menu_5 == 3:
                         break
                     else:
