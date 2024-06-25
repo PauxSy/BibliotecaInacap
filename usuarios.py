@@ -30,3 +30,18 @@ class Usuarios:
             rut_usuario, tipo_usuario, nombre, apellido, email, celular = usuario
             print(f"rut_usuario: {rut_usuario}, tipo_usuario: {tipo_usuario}, nombre: {nombre}, apellido: {apellido}, email: {email}, celular: {celular}")
 
+    def info_personal(self, rut_usuario):
+        sql = "SELECT * FROM USUARIOS WHERE RUT_USUARIO = %s"
+        self.cursor.execute(sql, (rut_usuario,))
+        info_usuario = self.cursor.fetchone()
+        print("------------[Información de Usuario]-------------")
+        print("Rut:          ",info_usuario[0])
+        print("Tipo Usuario: ",info_usuario[1])
+        print("Nombre:       ",info_usuario[2])
+        print("Apellido:     ",info_usuario[3])
+        print("Email:        ",info_usuario[4])
+        print("Celular:      ",info_usuario[5])
+        print("---------------------------------------------------")
+                
+            
+        

@@ -10,6 +10,7 @@ class Multas:
         self.biblioteca = biblioteca
         self.valor_diario_multa = 1000
         
+ 
     
     def pago_multa(self, rut_usuario):
         # Obtener el cursor de la biblioteca
