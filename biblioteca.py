@@ -28,21 +28,51 @@ class Biblioteca:
         except mysql.connector.Error as e:
             print(f'Error al conectar a la base de datos: {e}')
     
-
-
+    
     def ejecutar_consulta(self, query, params=None):
-        if params:
-            self.cursor.execute(query, params)
-        else:
-            self.cursor.execute(query)
-        self.conexion.commit()
-        return self.cursor.fetchall()
+        try:
+            if params:
+                self.cursor.execute(query, params)
+            else:
+                self.cursor.execute(query)
+            result = self.cursor.fetchall()
+            self.conexion.commit()
+            return result
+        except mysql.connector.Error as e:
+            print(f"Error al ejecutar la consulta: {e}")
+            self.conexion.rollback()
+
+
+    def reporte_tipo_usuario(self, tipo_usuario):
+        query = "SELECT * FROM usuarios WHERE tipo_usuario = %s"
+        params = (tipo_usuario,)
+        result = self.ejecutar_consulta(query, params)
+        print(f"Reporte de usuarios tipo {tipo_usuario}:")
+        for row in result:
+            print(row)
+
+    def reporte_prestamos_dia(self, fecha_prestamo):
+        query = "SELECT * FROM prestamos WHERE fecha_prestamo = %s"
+        params = (fecha_prestamo,)
+        result = self.ejecutar_consulta(query, params)
+        print(f"Reporte de préstamos para el día {fecha_prestamo}:")
+        for row in result:
+            print(row)
+
+    def reporte_devoluciones_dia(self, fecha_devolucion):
+        query = "SELECT * FROM devoluciones WHERE fecha_devolucion = %s"
+        params = (fecha_devolucion,)
+        result = self.ejecutar_consulta(query, params)
+        print(f"Reporte de devoluciones para el día {fecha_devolucion}:")
+        for row in result:
+            print(row)
+        
 
     def cerrar_conexion(self):
         self.conexion.close()
         print('Conexión cerrada.')
 
-    # Función principal del menú de la biblioteca
+    @staticmethod
     def MenuBiblioteca():
         print("Bienvenido al sistema\n")
         print("Ingrese los datos de su base de datos\n")
@@ -236,7 +266,24 @@ class Biblioteca:
                         print("Opción no válida")
 
             elif menu == 6:
-                pass  # Lógica para generar un reporte
+                while True:
+                    menu_6 = int(input("""
+                    1. Generar reporte por tipo de usuarios 
+                    2. Generar reporte de préstamos por día
+                    3. Generar reporte de devoluciones por día
+                    4.Volver al menú principal
+                    Ingrese su opción: """))
+                    if menu_6 == 1:
+                        tipo_usuario = input("Ingrese el tipo de usuario para ver el reporte(alumno/docente):")
+                        mi_biblioteca.reporte_tipo_usuario(tipo_usuario)
+                    if menu_6 == 2:
+                        fecha_prestamo = input("Ingrese la fecha para el reporte de préstamos (YYYY-MM-DD): ")
+                        mi_biblioteca.reporte_prestamos_dia(fecha_prestamo)
+                    if menu_6 == 3:
+                        fecha_devolucion = input("Ingrese la fecha para el reporte de devoluciones (YYYY-MM-DD): ")
+                        mi_biblioteca.reporte_devoluciones_dia(fecha_devolucion)
+                    elif menu_6 == 4:
+                        break
             
             elif menu == 7:
                 print("Saliendo del sistema...")
