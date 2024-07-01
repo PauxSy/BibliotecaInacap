@@ -1,4 +1,5 @@
 from datetime import datetime, time
+import os, time
 #from biblioteca import Biblioteca  # Asegúrate de importar la clase Biblioteca si no está en este archivo
 
 class Multas:
@@ -10,8 +11,7 @@ class Multas:
         self.biblioteca = biblioteca
         self.valor_diario_multa = 1000
         
- 
-    
+   
     def pago_multa(self, rut_usuario):
         # Obtener el cursor de la biblioteca
         cursor = self.biblioteca.conexion.cursor()
@@ -60,7 +60,35 @@ class Multas:
             
         cursor.close()
 
+    def comprobar_multas_re(self, id_prestamo):
+        # Obtener el cursor de la biblioteca
+        cursor = self.biblioteca.conexion.cursor()
+               
+        existe_multa = """
+            SELECT P.ID_PRESTAMO
+            FROM USUARIOS U 
+            JOIN PRESTAMOS P ON U.RUT_USUARIO = P.RUT_USUARIO 
+            JOIN DEVOLUCIONES D ON P.ID_PRESTAMO = D.ID_PRESTAMO 
+            JOIN MULTAS M ON D.ID_DEVOLUCION = M.ID_DEVOLUCION 
+            WHERE P.ID_PRESTAMO = %s AND M.ESTADO_MULTA = 'pendiente';
+                """
+        cursor.execute(existe_multa, (id_prestamo,))
 
+        existe_multa = cursor.fetchone()  # Usar cursor directamente
+        
+        cursor.close()
+
+        if existe_multa:
+            print("[Sistema]: El usuario tiene una multa pendiente por el préstamo. No es posible realizar renovación.")
+            print("Te devolveré al menu.")
+            #time.sleep(2)
+            #os.system('cls')
+              
+            return True
+            
+        else:
+            print("[Sistema de Prestamos]: El usuario no tiene multas pendientes de pago. Puede proceder con la Renovación.")
+            return False
             
     def comprobar_multas(self, rut_usuario):
         # Obtener el cursor de la biblioteca
@@ -76,13 +104,13 @@ class Multas:
                 """
         cursor.execute(existe_multa, (rut_usuario,))
 
-        existe_multa_ = cursor.fetchall()  # Usar cursor directamente
+        existe_multa = cursor.fetchall()  # Usar cursor directamente
         
         cursor.close()
 
-        if existe_multa_:
+        if existe_multa:
             print("[Sistema de Prestamos]: El usuario tiene una o más multas pendiente de pago. No es posible efectuar el préstamo.")
-            print("Te devolveré al menu principal.")
+            print("Te devolveré al menu.")
 
             return True
             
@@ -126,9 +154,9 @@ class Multas:
                 dias_a.append(dias_atraso)
             
                 
-                print("IDs de devolución atrasadas:", id_dev_atrasadas)
-                print("Fechas de devolución atrasadas:", fecha_dev_atrasadas)
-                print("Días de retraso:", dias_a)
+                #print("IDs de devolución atrasadas:", id_dev_atrasadas)
+                #print("Fechas de devolución atrasadas:", fecha_dev_atrasadas)
+                #print("Días de retraso:", dias_a)
                 
                                  
                 
@@ -144,7 +172,7 @@ class Multas:
                                           WHERE ID_DEVOLUCION = %s"""
                                           
                     cursor.execute(actualizar_multa, (valor_multa, dias_a[i],id_dev_atrasadas[i]))
-                    print("ID_devolucion_atrasada",id_dev_atrasadas[i])
+                    #print("ID_devolucion_atrasada",id_dev_atrasadas[i])
         
                 else:
                     registrar_multa = """INSERT INTO MULTAS (ID_DEVOLUCION, ESTADO_MULTA, MONTO_DEUDA, DIAS_RETRASO)
@@ -166,5 +194,3 @@ class Multas:
         finally:
             # Cerrar el cursor y la conexión
             self.biblioteca.cursor.close()
-
-            
