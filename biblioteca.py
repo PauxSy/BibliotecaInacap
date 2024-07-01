@@ -85,11 +85,11 @@ class Biblioteca:
     def MenuBiblioteca():
         print("Bienvenido al sistema\n")
         print("Ingrese los datos de su base de datos\n")
-        host = input("Ingrese el host (localhost): ")
-        user = input("Ingrese el usuario (root): ")
-        password = input("Ingrese la contraseña (0000): ")
-        port = input("Ingrese el puerto (3306): ")
-        database = input("Ingrese el nombre de la base de datos (PROYECTOFINAL): ")
+        host = "localhost"
+        user = "root"
+        password = "asdf1234"
+        port = 3306
+        database = "biblioteca"
 
         # Conectar a la base de datos
         mi_biblioteca = Biblioteca(host, user, password, port, database)
@@ -107,8 +107,8 @@ class Biblioteca:
             3. Gestionar Préstamos
             4. Gestionar Devoluciones
             5. Gestionar Renovaciones
-            6. Generar Reporte
-            7. Gestionar multas
+            6. Gestionar multas
+            7. Generar Reporte
             8. Salir del Sistema
             
             Ingrese su opción: """))
@@ -149,6 +149,7 @@ class Biblioteca:
                         isbn_libro = int(input("Ingrese el ISBN del libro a eliminar: "))
                         libro_a_eliminar = Libros(isbn_libro, None, None, None, None, None, mi_biblioteca.conexion, mi_biblioteca.cursor)
                         libro_a_eliminar.eliminar_libro(isbn_libro)
+                        print(" ")
                         print("Libro eliminado exitosamente.")
                     elif menu_1 == 3:
                         Biblioteca.limpiar_pantalla()
@@ -157,6 +158,7 @@ class Biblioteca:
                         libros = Libros(None, None, None, None, None, None, mi_biblioteca.conexion, mi_biblioteca.cursor)
                         libros.listar_libros_existentes()
                     elif menu_1 == 4:
+                        Biblioteca.limpiar_pantalla()
                         break
                     else:
                         print("Opción no válida")
@@ -203,6 +205,7 @@ class Biblioteca:
                         usuarios_bsd = Usuarios(None, None, None, None, None, None, mi_biblioteca.conexion, mi_biblioteca.cursor)
                         usuarios_bsd.listar_usuarios_existentes()
                     elif menu_2 == 4:
+                        Biblioteca.limpiar_pantalla()
                         break
                     else:
                         print("Opción no válida")
@@ -267,6 +270,7 @@ class Biblioteca:
                         prestamo = Prestamos(None, None, None, None, None, mi_biblioteca.conexion, mi_biblioteca.cursor)
                         prestamo.listar_prestamos()
                     elif menu_3 == 3:
+                        Biblioteca.limpiar_pantalla()
                         break
                     else:
                         print("Opción no válida")
@@ -302,6 +306,7 @@ class Biblioteca:
                         devolucion = Devoluciones(None, None, None, mi_biblioteca.conexion, mi_biblioteca.cursor)
                         devolucion.listar_devoluciones()
                     elif menu_4 == 3:
+                        Biblioteca.limpiar_pantalla()
                         break
                     else:
                         print("Opción no válida")
@@ -335,46 +340,14 @@ class Biblioteca:
                         prestamos = Prestamos(None, None, None, None, None, mi_biblioteca.conexion, mi_biblioteca.cursor)
                         prestamos.listar_renovaciones()
                     elif menu_5 == 3:
+                        Biblioteca.limpiar_pantalla()
                         break
                     else:
                         print("Opción no válida")
 
             elif menu == 6:
                 while True:
-                    Biblioteca.limpiar_pantalla()
-                    menu_6 = int(input("""
-                    [ Sistema Biblioteca Inacap ]
-                        - Gestión de Reportes - 
-                                       
-                    1. Generar reporte por tipo de usuarios 
-                    2. Generar reporte de préstamos por día
-                    3. Generar reporte de devoluciones por día
-                    4.Volver al menú principal
-                    Ingrese su opción: """))
-                    if menu_6 == 1:
-                        Biblioteca.limpiar_pantalla()
-                        print("[Generar Reporte por tipo de Usuarios]")
-                        print(" ")
-                        tipo_usuario = input("Ingrese el tipo de usuario para ver el reporte(alumno/docente):")
-                        mi_biblioteca.reporte_tipo_usuario(tipo_usuario)
-                    if menu_6 == 2:
-                        Biblioteca.limpiar_pantalla()
-                        print("[Generar Reporte de Préstamos por día]")
-                        print(" ")
-                        fecha_prestamo = input("Ingrese la fecha para el reporte de préstamos (YYYY-MM-DD): ")
-                        mi_biblioteca.reporte_prestamos_dia(fecha_prestamo)
-                    if menu_6 == 3:
-                        Biblioteca.limpiar_pantalla()
-                        print("[Generar reporte Devoluciones por día]")
-                        print(" ")
-                        fecha_devolucion = input("Ingrese la fecha para el reporte de devoluciones (YYYY-MM-DD): ")
-                        mi_biblioteca.reporte_devoluciones_dia(fecha_devolucion)
-                    elif menu_6 == 4:
-                        break
-                    
-            elif menu == 7:
-                while True:
-                    Biblioteca.limpiar_pantalla()
+                    multa.generar_multa()
                     menu_6 = int(input("""
                     [ Sistema Biblioteca Inacap ]
                         - Gestión de Multas - 
@@ -398,7 +371,47 @@ class Biblioteca:
                         multa.listar_multas()
                         
                     elif menu_6 == 3:
+                        Biblioteca.limpiar_pantalla()
                         break
+                    
+                    print("|----------------------------------------------------------------------------------------------------------------------------|")
+
+                    
+                    
+            elif menu == 7:
+                while True:
+                    Biblioteca.limpiar_pantalla()
+                    menu_7 = int(input("""
+                    [ Sistema Biblioteca Inacap ]
+                        - Gestión de Reportes - 
+                                       
+                    1. Generar reporte por tipo de usuarios 
+                    2. Generar reporte de préstamos por día
+                    3. Generar reporte de devoluciones por día
+                    4.Volver al menú principal
+                    Ingrese su opción: """))
+                    if menu_7 == 1:
+                        Biblioteca.limpiar_pantalla()
+                        print("[Generar Reporte por tipo de Usuarios]")
+                        print(" ")
+                        tipo_usuario = input("Ingrese el tipo de usuario para ver el reporte(alumno/docente):")
+                        mi_biblioteca.reporte_tipo_usuario(tipo_usuario)
+                    if menu_7 == 2:
+                        Biblioteca.limpiar_pantalla()
+                        print("[Generar Reporte de Préstamos por día]")
+                        print(" ")
+                        fecha_prestamo = input("Ingrese la fecha para el reporte de préstamos (YYYY-MM-DD): ")
+                        mi_biblioteca.reporte_prestamos_dia(fecha_prestamo)
+                    if menu_7 == 3:
+                        Biblioteca.limpiar_pantalla()
+                        print("[Generar reporte Devoluciones por día]")
+                        print(" ")
+                        fecha_devolucion = input("Ingrese la fecha para el reporte de devoluciones (YYYY-MM-DD): ")
+                        mi_biblioteca.reporte_devoluciones_dia(fecha_devolucion)
+                    elif menu_7 == 4:
+                        break
+                    
+
                     
                         
                     

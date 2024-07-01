@@ -231,6 +231,7 @@ class Prestamos:
         for prestamo in prestamos:
             id_prestamo, rut_usuario, isbn_libro, tipo_de_prestamo, estado_prestamo, fecha_Prestamo = prestamo
             print(f"id_prestamo: {id_prestamo}, rut_usuario: {rut_usuario}, isbn_libro: {isbn_libro}, Tipo_De_Prestamo: {tipo_de_prestamo}, estado_prestamo: {estado_prestamo}, Fecha_Prestamo: {fecha_Prestamo}")
+            print("|----------------------------------------------------------------------------------------------------------------------------|")
 
     def listar_renovaciones(self):
         sql = "SELECT * FROM Prestamos WHERE tipo_de_prestamo = 'renovacion'"
@@ -240,6 +241,7 @@ class Prestamos:
         for prestamo in prestamos:
             id_prestamo, rut_usuario, isbn_libro, tipo_de_prestamo, estado_prestamo, fecha_Prestamo = prestamo
             print(f"id_prestamo: {id_prestamo}, rut_usuario: {rut_usuario}, isbn_libro: {isbn_libro}, Tipo_De_Prestamo: {tipo_de_prestamo}, estado_prestamo: {estado_prestamo}, Fecha_Prestamo: {fecha_Prestamo}")
+            print("|----------------------------------------------------------------------------------------------------------------------------|")
 
 
 

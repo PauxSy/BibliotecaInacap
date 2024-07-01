@@ -38,13 +38,13 @@ class Multas:
             pago = input("¿Desea proceder a registrar el pago de la multa? [1. Si / 2. No]\n")
             if pago == "1":
                 cursor.execute("""
-                    UPDATE MULTAS M
-                    JOIN DEVOLUCIONES D ON P.ID_PRESTAMO = D.ID_PRESTAMO 
-                    JOIN PRESTAMOS P ON D.ID_PRESTAMO = P.ID_PRESTAMO 
-                    JOIN USUARIOS U ON P.RUT_USUARIO = U.RUT_USUARIO
-                    SET M.ESTADO_MULTA = 'Pagada'
-                    WHERE U.RUT_USUARIO = %s
-                               """)
+                UPDATE MULTAS M
+                JOIN DEVOLUCIONES D ON M.ID_DEVOLUCION = D.ID_DEVOLUCION 
+                JOIN PRESTAMOS P ON D.ID_PRESTAMO = P.ID_PRESTAMO 
+                JOIN USUARIOS U ON P.RUT_USUARIO = U.RUT_USUARIO
+                SET M.ESTADO_MULTA = "Pagada"
+                WHERE P.RUT_USUARIO = %s;
+                               """,(rut_usuario,))  
                 # Confirmar los cambios en la base de datos
                 self.biblioteca.conexion.commit()
             
@@ -110,12 +110,14 @@ class Multas:
 
         if existe_multa:
             print("[Sistema de Prestamos]: El usuario tiene una o más multas pendiente de pago. No es posible efectuar el préstamo.")
-            print("Te devolveré al menu.")
+            print("|----------------------------------------------------------------------------------------------------------------------------|")
 
             return True
             
         else:
+            print(" ")
             print("[Sistema de Prestamos]: El usuario no tiene multas pendientes de pago. Puede proceder con el préstamo.")
+            print(" ")
             return False
         
 
@@ -129,7 +131,7 @@ class Multas:
         try:
             # Consulta para seleccionar devoluciones atrasadas
             devo_atrasadas = """SELECT ID_DEVOLUCION, FECHA_DEVOLUCION FROM DEVOLUCIONES 
-                                WHERE FECHA_DEVOLUCION < %s AND ESTADO_DEVOLUCION = "PENDIENTE" 
+                                WHERE FECHA_DEVOLUCION < %s AND ESTADO_DEVOLUCION = 'PENDIENTE' 
                              """
             cursor.execute(devo_atrasadas, (fecha_actual,))
         
@@ -166,10 +168,9 @@ class Multas:
                 existe_multa = cursor.fetchone()[0]  
                 if existe_multa:
                     actualizar_multa = """UPDATE MULTAS 
-                                          SET ESTADO_MULTA = 'Pendiente', 
-                                              MONTO_DEUDA = %s, 
+                                          SET MONTO_DEUDA = %s, 
                                               DIAS_RETRASO = %s 
-                                          WHERE ID_DEVOLUCION = %s"""
+                                          WHERE ID_DEVOLUCION = %s AND ESTADO_MULTA = 'Pendiente' """
                                           
                     cursor.execute(actualizar_multa, (valor_multa, dias_a[i],id_dev_atrasadas[i]))
                     #print("ID_devolucion_atrasada",id_dev_atrasadas[i])
@@ -196,10 +197,11 @@ class Multas:
             self.biblioteca.cursor.close()
             
     def listar_multas(self):
+        cursor = self.biblioteca.conexion.cursor()
         sql = "SELECT * FROM Multas"
-        self.cursor.execute(sql)
-        multas = self.cursor.fetchall()
-        print("------| Registro de Multas |--------")
+        cursor.execute(sql)
+        multas = cursor.fetchall()
+        print("|----------| Registro de Multas |--------------------------------------------------------------------------------------------|")
         for multa in multas:
             id_multa, id_devolucion, estado_multa, monto_deuda, dias_retraso = multa
             print(f"ID_Multa: {id_multa}, Id_Devolución: {id_devolucion}, Estado_Multa: {estado_multa}, Monto_Deuda: {monto_deuda}, Dias Retraso: {dias_retraso}")
