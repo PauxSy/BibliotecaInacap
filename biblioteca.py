@@ -206,37 +206,7 @@ class Biblioteca:
                         usuarios_bsd = Usuarios(None, None, None, None, None, None, mi_biblioteca.conexion, mi_biblioteca.cursor)
                         usuarios_bsd.listar_usuarios_existentes()
                     elif menu_2 == 4:
-<<<<<<< HEAD
                         Biblioteca.limpiar_pantalla()
-=======
-                        print("[Buscar Usuario por Rut ]")
-                        print(" ")
-                        rut_usuario = input("Ingrese el RUT del usuario a Buscar: ")
-                        while True:
-                            menu_0=int(input(""" 
-                            1.Información personal
-                            2.Últimos libros en préstamo
-                            3.Deudas
-                            4.Volver al menú de usuario
-                            Ingrese su opción: """))  
-                            if menu_0==1 :
-                                usuarios_bsd = Usuarios(rut_usuario, None, None, None, None, None, mi_biblioteca.conexion, mi_biblioteca.cursor)
-                                usuarios_bsd.info_personal(rut_usuario)
-                            elif menu_0==2:
-                                
-                                usuarios_bsd = Usuarios(rut_usuario, None, None, None, None, None, mi_biblioteca.conexion, mi_biblioteca.cursor)
-                                usuarios_bsd.hist_prestamos_usuario(rut_usuario)
-                            elif menu_0==3 :
-                                
-                                usuarios_bsd = Usuarios(rut_usuario, None, None, None, None, None, mi_biblioteca.conexion, mi_biblioteca.cursor)
-                                usuarios_bsd.hist_deuda_usuarios(rut_usuario)
-
-                            elif menu_0==4:
-                                break
-                            else:
-                                print("Opción no válida_pp")  
-                    elif menu_2 == 5:
->>>>>>> 9525e2acab6df271c31ee9340d312025451b3b9f
                         break
                     else:
                         print("Opción no válida")
@@ -254,12 +224,12 @@ class Biblioteca:
                     3. Volver al menú principal
                     Ingrese su opción: """))
                     if menu_3 == 1:
-                        Biblioteca.limpiar_pantalla()
+                        Biblioteca.limpiar_pantalla()                      
                         print("[Ingresar Préstamo]")
                         print(" ")
                         print("Ingrese los datos del préstamo a guardar:\n")
                         rut_usuario = input("Ingrese el RUT del usuario: ")
-                        multa.generar_multa()
+                        #multa.generar_multa()
                         if multa.comprobar_multas(rut_usuario):
                             continue
                         isbn_libro = int(input("Ingrese el ISBN del libro: "))
