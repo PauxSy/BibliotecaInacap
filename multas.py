@@ -195,7 +195,6 @@ class Multas:
         finally:
             # Cerrar el cursor y la conexión
             self.biblioteca.cursor.close()
-<<<<<<< HEAD
             
     def listar_multas(self):
         cursor = self.biblioteca.conexion.cursor()
@@ -206,5 +205,3 @@ class Multas:
         for multa in multas:
             id_multa, id_devolucion, estado_multa, monto_deuda, dias_retraso = multa
             print(f"ID_Multa: {id_multa}, Id_Devolución: {id_devolucion}, Estado_Multa: {estado_multa}, Monto_Deuda: {monto_deuda}, Dias Retraso: {dias_retraso}")
-=======
->>>>>>> 9525e2acab6df271c31ee9340d312025451b3b9f
