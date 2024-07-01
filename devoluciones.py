@@ -145,4 +145,5 @@ class Devoluciones:
         for devolucion in devoluciones:
             id_devolucion, id_prestamo, fecha_devolucion, estado_devolucion = devolucion
             print(f"id_devolucion: {id_devolucion}, id_prestamo: {id_prestamo}, fecha_devolucion: {fecha_devolucion}, estado_devolucion: {estado_devolucion}")
+            print("|----------------------------------------------------------------------------------------------------------------------------|")
 

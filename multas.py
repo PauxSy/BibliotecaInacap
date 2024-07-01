@@ -48,7 +48,7 @@ class Multas:
                 # Confirmar los cambios en la base de datos
                 self.biblioteca.conexion.commit()
             
-                print("[Sistema de Préstamos]: El pago de la/s multa/s pendientes ha sido registrado exitosamente.")
+                print("[Sistema de Préstamos]: El pago total de multa ha sido registrado exitosamente.")
 
             else:
                 print("[Sistema de Préstamos]: Se ha cancelado el proceso de pago.")                
