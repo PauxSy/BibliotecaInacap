@@ -43,27 +43,41 @@ class Usuarios:
         print("Celular:      ",info_usuario[5])
         print("---------------------------------------------------")
         
-        
+
     def hist_prestamos_usuario(self, rut_usuario):
-        sql = "SELECT * FROM PRESTAMOS WHERE RUT_USUARIO = %s"
+        # Consulta SQL para obtener el historial de préstamos del usuario
+        sql = """
+        SELECT P.ISBN_LIBRO, L.TITULO, P.ESTADO_PRESTAMO, P.FECHA_PRESTAMO, D.FECHA_DEVOLUCION
+        FROM PRESTAMOS P
+        JOIN DEVOLUCIONES D ON P.ID_PRESTAMO = D.ID_PRESTAMO
+        JOIN LIBROS L ON P.ISBN_LIBRO = L.ISBN_LIBRO
+        WHERE P.RUT_USUARIO = %s
+        ORDER BY D.FECHA_DEVOLUCION DESC
+        LIMIT 5;
+        """
         self.cursor.execute(sql, (rut_usuario,))
         historial_prestamos = self.cursor.fetchall()
-        
+
+        # Consulta para obtener el nombre y apellido del usuario
         sql2 = "SELECT NOMBRE, APELLIDO FROM USUARIOS WHERE RUT_USUARIO = %s"
         self.cursor.execute(sql2, (rut_usuario,))
-        name = self.cursor.fetchone()      
+        name = self.cursor.fetchone()
+
+        # Imprimir el historial de préstamos en el formato solicitado
         print("------------[ Historial de Préstamos ]-------------")
-        print("Rut: ",rut_usuario)
-        print("Nombre: ",name[0],"",name[1])
-        for i in range(0,len(historial_prestamos),1):
-            print("-----------------------------------------------------")            
-            x = historial_prestamos[i]
-            print("ISBN: ",x[2])
-            print("Tipo Préstamo: ",x[3])
-            print("Estado Préstamo: ",x[4])
-            print("Fecha Préstamo: ",x[5])    
+        print("Rut: ", rut_usuario)
+        print("Nombre: ", name[0], "", name[1])
+        for prestamo in historial_prestamos:
+            isbn, titulo, estado_prestamo, fecha_prestamo, fecha_devolucion = prestamo
+            print("-----------------------------------------------------")
+            print("ISBN: ", isbn)
+            print("Título: ", titulo)
+            print("Estado Préstamo: ", estado_prestamo)
+            print("Fecha Préstamo: ", fecha_prestamo)
+            print("Fecha de Devolución: ", fecha_devolucion)
         print("-----------------------------------------------------")
-        
+
+
     def hist_deuda_usuarios(self,rut_usuario):
         sql = "SELECT NOMBRE, APELLIDO FROM USUARIOS WHERE RUT_USUARIO = %s"
         self.cursor.execute(sql, (rut_usuario,))
@@ -92,5 +106,7 @@ class Usuarios:
             print("Estado Multa: ",x[4])
             
         print("-----------------------------------------------------")
+
+
 
         
