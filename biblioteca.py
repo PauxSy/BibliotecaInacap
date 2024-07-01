@@ -140,7 +140,8 @@ class Biblioteca:
                     1. Ingresar un Usuario
                     2. Eliminar un Usuario
                     3. Listar usuarios existentes
-                    4. Volver al menú principal
+                    4. Buscar por rut 
+                    5. Volver al menú principal
                     Ingrese su opción: """))
                     if menu_2 == 1:
                         print("Ingrese los datos del usuario a guardar:\n")
@@ -162,6 +163,31 @@ class Biblioteca:
                         usuarios_bsd = Usuarios(None, None, None, None, None, None, mi_biblioteca.conexion, mi_biblioteca.cursor)
                         usuarios_bsd.listar_usuarios_existentes()
                     elif menu_2 == 4:
+                        rut_usuario = input("Ingrese el RUT del usuario a Buscar: ")
+                        while True:
+                            menu_0=int(input(""" 
+                            1.Información personal
+                            2.Últimos libros en préstamo
+                            3.Deudas
+                            4.Volver al menú de usuario
+                            Ingrese su opción: """))  
+                            if menu_0==1 :
+                                usuarios_bsd = Usuarios(rut_usuario, None, None, None, None, None, mi_biblioteca.conexion, mi_biblioteca.cursor)
+                                usuarios_bsd.info_personal(rut_usuario)
+                            elif menu_0==2:
+                                
+                                usuarios_bsd = Usuarios(rut_usuario, None, None, None, None, None, mi_biblioteca.conexion, mi_biblioteca.cursor)
+                                usuarios_bsd.hist_prestamos_usuario(rut_usuario)
+                            elif menu_0==3 :
+                                
+                                usuarios_bsd = Usuarios(rut_usuario, None, None, None, None, None, mi_biblioteca.conexion, mi_biblioteca.cursor)
+                                usuarios_bsd.hist_deuda_usuarios(rut_usuario)
+
+                            elif menu_0==4:
+                                break
+                            else:
+                                print("Opción no válida_pp")  
+                    elif menu_2 == 5:
                         break
                     else:
                         print("Opción no válida")

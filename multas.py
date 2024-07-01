@@ -166,3 +166,5 @@ class Multas:
         finally:
             # Cerrar el cursor y la conexión
             self.biblioteca.cursor.close()
+
+            
