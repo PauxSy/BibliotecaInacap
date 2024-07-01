@@ -85,11 +85,11 @@ class Biblioteca:
     def MenuBiblioteca():
         print("Bienvenido al sistema\n")
         print("Ingrese los datos de su base de datos\n")
-        host = "localhost"
-        user = "root"
-        password = "asdf1234"
-        port = 3306
-        database = "biblioteca"
+        host = input("Host (localhost): ")
+        user = input("Usuario (root): ")
+        password = input("Contraseña: ")
+        port = input("Puerto (3306):")
+        database = input("Database (PROYECTOFINAL): ")
 
         # Conectar a la base de datos
         mi_biblioteca = Biblioteca(host, user, password, port, database)
